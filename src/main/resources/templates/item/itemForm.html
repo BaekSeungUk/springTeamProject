@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Title</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+          crossorigin="anonymous"></script>
+
+
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            const errorMessage = [[${errorMessage}]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+            bindDomEvent();
+        });
+
+        function bindDomEvent() {
+            $(".custom-file-input").on("change", function () {
+                const fileName = $(this).val().split("\\").pop();
+                let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+                fileExt = fileExt.toLowerCase();
+
+                if (fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp") {
+                    alert("이미지 파일만 등록이 가능합니다.");
+                    return;
+                }
+
+                $(this).siblings(".custom-file-label").html(fileName);
+            });
+        }
+    </script>
+
+  <th:block layout:fragment="css">
+    <style>
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .img-div {
+            margin-bottom: 10px;
+        }
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+  </th:block>
+</head>
+<body>
+<div class="container">
+  <form id="frm" name="frm" action="/tripInsertItem" method="post" enctype="multipart/form-data">
+    <p class="h2">
+      여행지 등록
+    </p>
+
+    <input type="hidden" >
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">여행지명</span>
+      </div>
+      <input type="text" id="trip-name" name="tripName" class="form-control" placeholder="여행지명을 입력해주세요">
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">가격</span>
+      </div>
+      <input type="number" id="trip-price" name="tripPrice"  class="form-control" placeholder="여행지의 가격을 입력해주세요">
+    </div>
+
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">여행지 테마 번호 1: 산 2: 바다 3: 하늘</span>
+    </div>
+    <input type="number" id="trip-category-pk" name="tripCategoryPk"  class="form-control" placeholder="여행지의 테마를 고르세요">
+  </div>
+  <p>ex) 여행지역 번호 선택<br>
+  서울: 1 인천: 2 대전: 3 대구: 4 광주: 5 부산: 6 울산: 7 세종: 8 경기: 9<br>
+  강원: 10 충북: 11 충남: 12 경북: 13 경남: 14 전북: 15 전남: 16 제주: 17</p>
+
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">여행지역</span>
+    </div>
+    <input type="number" id="trip-regoion-pk" name="tripRegoionPk"  class="form-control" placeholder="여행지역을 고르세요">
+  </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">여행지 지역(위도)</span>
+      </div>
+      <input type="number" id="trip-latitude" name="tripLatitude"  class="form-control" step="any" placeholder="여행지의 지역(위도) 입력해주세요">
+    </div>
+
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">여행지 지역(경도)</span>
+    </div>
+    <input type="number" id="trip-hardness" name="tripHardness" class="form-control" step="any" placeholder="여행지의 지역(경도) 입력해주세요">
+  </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" >여행지 상세 내용</span>
+      </div>
+      <textarea class="form-control" id="trip-contents" name="tripContents" aria-label="With textarea" ></textarea>
+    </div>
+
+      <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}">
+        <div class="custom-file img-div">
+          <input type="file" id="files" name="files" class="custom-file-input" multiple="multiple">
+          <label class="custom-file-label" th:text="여행지이미지 + ${num}"></label>
+        </div>
+      </div>
+
+
+    <div  style="text-align: center">
+      <button type="submit" class="btn btn-primary">저장</button>
+      <button  type="reset" class="btn btn-primary">취소</button>
+    </div>
+
+
+  </form>
+</div>
+</div>
+</body>
+</html>

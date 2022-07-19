@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Title</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+          crossorigin="anonymous"></script>
+  <script>
+      $(document).ready(function() {
+          $("#list").on("click", function() {
+              location.href = "tripList";
+          });
+
+          $("#edit").on("click", function() {
+              var frm = $("#frm")[0];
+              frm.action = "tripUpdate";
+              frm.submit();
+          });
+
+          $("#delete").on("click", function() {
+              var frm = $("#frm")[0];
+              frm.action = "tripDeleteItem";
+              frm.submit();
+          });
+      });
+  </script>
+</head>
+<body>
+<div class="container">
+  <h2>여행지 수정하기</h2>
+
+  <form id="frm" method="post">
+    <table class="board_detail table table-borderless">
+      <tbody>
+      <tr>
+        <th scope="row">글 번호</th>
+        <td th:text="${trip.tripPk}"></td>
+      </tr>
+      <tr>
+        <th scope="row">제목</th>
+        <td colspan="3">
+          <input type="text" id="trip-name" name="tripName" th:value="${trip.tripName}">
+        </td>
+      </tr>
+      여행지 테마 번호 1: 산 2: 바다 3: 하늘
+      <p>ex) 여행지역 번호 선택<br>
+        서울: 1 인천: 2 대전: 3 대구: 4 광주: 5 부산: 6 울산: 7 세종: 8 경기: 9<br>
+        강원: 10 충북: 11 충남: 12 경북: 13 경남: 14 전북: 15 전남: 16 제주: 17</p>
+      <tr>
+        <th scope="row">테마</th>
+        <td colspan="3">
+          <input type="text" id="trip-category-pk" name="tripCategoryPk" th:value="${trip.tripCategoryPk}">
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">지역</th>
+        <td colspan="3">
+          <input type="text" id="trip-regoion-pk" name="tripRegoionPk" th:value="${trip.tripRegoionPk}">
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">가격</th>
+        <td colspan="3">
+          <input type="text" id="trip-price" name="tripPrice" th:value="${trip.tripPrice}">
+        </td>
+      </tr>
+        <tr>
+        <th scope="row">위도</th>
+        <td colspan="3">
+          <input type="text" id="trip-latitude" name="tripLatitude" th:value="${trip.tripLatitude}">
+        </td>
+        </tr>
+        <tr>
+        <th scope="row">경도</th>
+        <td colspan="3">
+          <input type="text" id="trip-hardness" name="tripHardness" th:value="${trip.tripHardness}">
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">내용</th>
+        <td colspan="4" class="view_text">
+          <textarea name="tripContents" id="trip-contents" title="내용" cols="30" rows="10" th:text="${trip.tripContents}"></textarea>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <input type="hidden" name="tripPk" th:value="${trip.tripPk}">
+  </form>
+  <button type="button" id="list" class="btn">목록으로</button>
+  <button type="button" id="edit" class="btn">수정하기</button>
+  <button type="button" id="delete" class="btn">삭제하기</button>
+</div>
+</body>
+</html>

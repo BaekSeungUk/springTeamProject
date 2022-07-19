@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 현재 파일이 MyBatis를 사용한 SQL 쿼리가 있는 xml 파일임을 나타내는 표시 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bitc.gotrip.mapper.TripMapper">
+
+    <select id="selectTripList" resultType="com.bitc.gotrip.dto.TripDto">
+       <![CDATA[
+        SELECT
+            trip_category_pk, trip_regoion_pk, trip_name, trip_price, trip_contents, trip_pk, trip_create
+        FROM
+            trip
+        WHERE
+            deleted_yn = 'N'
+        ]]>
+    </select>
+
+    <select id="selectTripListPage" resultType="com.bitc.gotrip.dto.TripDto">
+        <![CDATA[
+        SELECT
+            trip_category_pk, trip_regoion_pk, trip_name, trip_price, trip_contents, trip_pk, trip_create
+        FROM
+            trip
+        WHERE
+            deleted_yn = 'N'
+        ]]>
+    </select>
+
+    <select id="selectFileList" resultType="com.bitc.gotrip.dto.FileDto">
+       <![CDATA[
+        SELECT
+            stored_file_path, original_file_name, file_size, trip_pk
+        FROM
+            file
+        WHERE
+            deleted_yn = 'N'
+        ]]>
+    </select>
+
+<!--    <select id="selectThumFileList" resultType="com.bitc.gotrip.dto.FileDto">-->
+<!--       <![CDATA[-->
+<!--        SELECT-->
+<!--            stored_file_path, original_file_name, file_size, trip_pk-->
+<!--        FROM-->
+<!--            file-->
+<!--        WHERE-->
+<!--            deleted_yn = 'N'-->
+<!--        GROUP BY-->
+<!--            trip_pk-->
+
+<!--        ]]>-->
+<!--    </select>-->
+
+    <select id="selectThumFileList" parameterType="int" resultType="com.bitc.gotrip.dto.FileDto">
+       <![CDATA[
+        SELECT
+            stored_file_path, original_file_name, file_size, trip_pk
+        FROM
+            file
+        WHERE
+            deleted_yn = 'N'
+        AND
+            trip_pk = #{tripPk}
+        GROUP BY
+            trip_pk
+
+        ]]>
+    </select>
+
+
+    <insert id="insertTrip" parameterType="com.bitc.gotrip.dto.TripDto" useGeneratedKeys="true" keyProperty="tripPk">
+        <![CDATA[
+        INSERT INTO
+            trip (trip_category_pk, trip_regoion_pk, trip_name, trip_price, trip_contents, trip_latitude, trip_hardness, trip_create)
+        VALUES
+            (#{tripCategoryPk}, #{tripRegoionPk}, #{tripName}, #{tripPrice}, #{tripContents}, #{tripLatitude}, #{tripHardness}, NOW())
+        ]]>
+    </insert>
+
+    <insert id="insertFileList" parameterType="com.bitc.gotrip.dto.FileDto">
+        <![CDATA[
+            INSERT INTO
+                file (trip_pk, original_file_name, stored_file_path, file_size)
+            VALUES
+        ]]>
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.tripPk},
+            #{item.originalFileName},
+            #{item.storedFilePath},
+            #{item.fileSize}
+            )
+        </foreach>
+    </insert>
+
+
+    <select id="selectTripDetail" resultType="com.bitc.gotrip.dto.TripDto" parameterType="int">
+        <![CDATA[
+        SELECT
+            trip_pk, trip_name, trip_price, trip_contents, trip_latitude, trip_hardness, trip_category_pk, trip_regoion_pk
+        FROM
+            trip
+        WHERE
+            trip_pk = #{tripPk}
+        AND
+            deleted_yn = 'N'
+        ]]>
+    </select>
+
+    <select id="selectFileDetail" resultType="com.bitc.gotrip.dto.FileDto" parameterType="int">
+        <![CDATA[
+        SELECT
+            file_pk, trip_pk, original_file_name, stored_file_path
+        FROM
+            file
+        WHERE
+            trip_pk = #{tripPk}
+        AND
+            deleted_yn = 'N'
+        ]]>
+    </select>
+
+    <select id="selectTripDetailList" resultType="com.bitc.gotrip.dto.TripDto" parameterType="int">
+        <![CDATA[
+        SELECT
+            trip_pk, trip_name, trip_price, trip_contents, trip_latitude, trip_hardness, trip_category_pk, trip_regoion_pk
+        FROM
+            trip
+        WHERE
+            trip_pk = #{tripPk}
+        AND
+            deleted_yn = 'N'
+        ]]>
+    </select>
+
+    <select id="selectTripFileList" parameterType="int" resultType="com.bitc.gotrip.dto.FileDto">
+        <![CDATA[
+        SELECT
+            file_pk, trip_pk, original_file_name, stored_file_path, FORMAT(ROUND(file_size / 1024), 0) AS file_size
+        FROM
+            file
+        WHERE
+            trip_pk = #{tripPk}
+        AND
+            deleted_yn = 'N'
+        ]]>
+    </select>
+
+    <delete id="deleteTrip" parameterType="int">
+        <![CDATA[
+        UPDATE
+            trip
+        SET
+            deleted_yn = 'Y'
+        WHERE
+            trip_pk = #{tripPk}
+        ]]>
+    </delete>
+
+    <update id="tripUpdate" parameterType="com.bitc.gotrip.dto.TripDto">
+        <![CDATA[
+        UPDATE
+            trip
+        SET
+            trip_name = #{tripName},trip_category_pk = #{tripCategoryPk}, trip_regoion_pk = #{tripRegoionPk}, trip_price = #{tripPrice}, trip_contents = #{tripContents}, trip_latitude = #{tripLatitude}, trip_hardness = #{tripHardness}, trip_update = NOW()
+        WHERE
+            trip_pk = #{tripPk}
+        AND
+            deleted_yn = 'N'
+        ]]>
+    </update>
+
+
+
+</mapper>
