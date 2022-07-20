@@ -48,7 +48,7 @@
           <img th:src="'/res/'+ ${file.storedFilePath}" alt="상세 이미지1" class="d-block w-100" style="height:400px">
         </div>
 
-        <th:block th:if="${files.size} == 2">
+        <th:block th:if="${files.size} >= 2">
         <div th:each="file : ${files[1]}" class="carousel-item">
           <img th:src="'/res/'+ ${file.storedFilePath}" alt="상세 이미지2" class="d-block w-100" style="height:400px">
         </div>
