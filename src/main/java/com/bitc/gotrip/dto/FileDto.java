@@ -6,14 +6,13 @@ import java.util.List;
 
 @Data
 public class FileDto {
-
     private int filePk;
-    private int tripPk;
+    private int tableNum;
+    private int pkNum;
     private String originalFileName;
     private String storedFilePath;
     private long fileSize;
-    private int tableNum;
-    private int pkNum;
+    private String deletedYn;
 
     private List<TripDto> tripList;
 }

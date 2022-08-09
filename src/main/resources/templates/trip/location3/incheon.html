@@ -104,18 +104,18 @@
   <div class="row">
     <th:block th:if="${#lists.size(dataList.getList())} > 0" th:each="list : ${dataList.getList()}">
       <th:block th:if="${list.tripCategoryPk} == 3">
-        <th:block th:if="${list.tripRegoionPk} == 2">
+        <th:block th:if="${list.tripRegionPk} == 2">
 
           <div class="col-md-4 margin">
             <div class="card">
-              <a href="/tripDetail?tripPk=" th:attrappend="href=${list.tripPk}" class="text-dark">
+              <a href="/tripDetail?pkNum=" th:attrappend="href=${list.pkNum}" class="text-dark">
                 <th:blcok th:each="item : ${list.fileList}">
                   <img th:src="'/res/' + ${item.storedFilePath}"  class="card-img-top"
                        th:alt="${list.tripName}" height="400">
                 </th:blcok>
                 <div class="card-body">
                   <h4 class="card-title">
-                    <a href="/tripDetail?tripPk=" th:attrappend="href=${list.tripPk}" th:text="${list.tripName}"/>
+                    <a href="/tripDetail?pkNum=" th:attrappend="href=${list.pkNum}" th:text="${list.tripName}"/>
                   </h4>
                   <h3 class="card-title text-danger">
                     [[${list.tripPrice}]]원</h3>

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Title</title>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
-        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
@@ -55,7 +56,38 @@
   </th:block>
 </head>
 <body>
-<div class="container">
+<div layout:fragment="content">
+
+  <nav class="navbar navbar-dark bg-danger" aria-label="First navbar example" style="font-family: 'Cafe24 Ohsquare'">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/member/myPage">My Page</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01"
+              aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav me-auto mb-2">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/member/myReview">Review & QnA</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/reserve/reserveList">예약 & 찜목록</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/member/myEdit">회원 정보 수정</a>
+          </li>
+            <li class="nav-item">
+              <a  class="nav-link" href="/tripItem">여행지 등록</a>
+            </li>
+            <li class="nav-item">
+              <a  class="nav-link" href="/tripList">여행지 관리</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container mt-5">
   <form id="frm" name="frm" action="/tripInsertItem" method="post" enctype="multipart/form-data">
     <p class="h2">
       여행지 등록
@@ -91,7 +123,7 @@
     <div class="input-group-prepend">
       <span class="input-group-text">여행지역</span>
     </div>
-    <input type="number" id="trip-regoion-pk" name="tripRegoionPk"  class="form-control" placeholder="여행지역을 고르세요">
+    <input type="number" id="trip-region-pk" name="tripRegionPk"  class="form-control" placeholder="여행지역을 고르세요">
   </div>
 
     <div class="input-group">
@@ -118,7 +150,7 @@
       <div class="form-group" th:each="num: ${#numbers.sequence(1,3)}">
         <div class="custom-file img-div">
           <input type="file" id="files" name="files" class="custom-file-input" multiple="multiple">
-          <label class="custom-file-label" th:text="여행지이미지 + ${num}"></label>
+          <label class="custom-file-label"></label>
         </div>
       </div>
 
@@ -130,6 +162,7 @@
 
 
   </form>
+</div>
 </div>
 </div>
 </body>

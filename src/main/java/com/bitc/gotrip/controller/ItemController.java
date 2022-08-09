@@ -6,7 +6,6 @@ import com.bitc.gotrip.service.TripService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -23,24 +22,24 @@ public class ItemController {
 
     @RequestMapping("/tripItem")
     public String tripItem() throws Exception {
-        return "/item/itemForm";
+        return "item/itemForm";
     }
 
     @RequestMapping("/tripInsertItem")
     public String insertTrip(TripDto trip, MultipartHttpServletRequest multiUploadFiles) throws Exception {
         tripService.insertTrip(trip, multiUploadFiles);
-        return "redirect:/";
+        return "redirect:";
     }
 
     @RequestMapping("/tripDeleteItem")
-    public String deleteTrip(@RequestParam("tripPk")int tripPk) throws Exception {
-        tripService.deleteTrip(tripPk);
-        return "redirect:/tripList";
+    public String deleteTrip(@RequestParam("pkNum")int pkNum) throws Exception {
+        tripService.deleteTrip(pkNum);
+        return "redirect:tripList";
     }
 
     @RequestMapping("/tripList")
     public ModelAndView tripDelete(@RequestParam(required = false, defaultValue = "1") int pageNum, HttpServletRequest request) throws Exception {
-        ModelAndView mv = new ModelAndView("/item/itemList");
+        ModelAndView mv = new ModelAndView("item/itemList");
 
         PageInfo<TripDto> dataList = new PageInfo<>(tripService.selectTripListPage(pageNum), 5);
 
@@ -50,13 +49,13 @@ public class ItemController {
     }
 
     @RequestMapping("/tripItemDetail")
-    public ModelAndView tripDetail(@RequestParam("tripPk") int tripPk) throws Exception {
-        ModelAndView mv = new ModelAndView("/item/itemDetail");
+    public ModelAndView tripDetail(@RequestParam("pkNum") int pkNum) throws Exception {
+        ModelAndView mv = new ModelAndView("item/itemDetail");
 
-        TripDto trip = tripService.selectTripDetail(tripPk);
+        TripDto trip = tripService.selectTripDetail(pkNum);
         mv.addObject("trip", trip);
 
-        List<FileDto> files = tripService.selectFileDetail(tripPk);
+        List<FileDto> files = tripService.selectFileDetail(pkNum);
         mv.addObject("files", files);
 
 
@@ -64,9 +63,14 @@ public class ItemController {
     }
 
     @RequestMapping("/tripUpdate")
-    public String tripUpdate(TripDto trip) throws Exception {
-        tripService.tripUpdate(trip);
-        return "redirect:/tripList";
+    public String tripUpdate(TripDto trip, MultipartHttpServletRequest multiUploadFiles,
+                            @RequestParam("deleteFileList") List<Integer> fileList) throws Exception {
+        tripService.tripUpdate(trip, multiUploadFiles);
+        for(Integer filePk : fileList) {
+
+            tripService.updateTripFile(filePk);
+        }
+        return "redirect:tripList";
     }
 
 
